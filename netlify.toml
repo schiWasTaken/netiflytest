@@ -1,3 +1,5 @@
 [build]
   functions = "netlify/functions"
   publish = "public"
+[functions]
+  included_files = ["data/results.csv"]
