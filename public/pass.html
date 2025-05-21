@@ -2,23 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>You Passed!</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body, html {
+      margin: 0; padding: 0; height: 100%; background: #000; /* optional dark bg */
+      display: flex; justify-content: center; align-items: center;
+      font-family: Arial, sans-serif;
+    }
+    .certificate-container {
+      position: relative;
+      display: inline-block;
+    }
+    .certificate-image {
+      display: block;
+      max-width: 90vw;
+      height: auto;
+    }
+    .name-overlay {
+      position: absolute;
+      top: 50%; /* vertical center */
+      left: 50%; /* horizontal center */
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 3rem;
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(0,0,0,0.7);
+      pointer-events: none; /* so it doesn’t block clicks */
+      white-space: nowrap;
+    }
+  </style>
 </head>
-<body class="bg-green-100 flex flex-col items-center justify-center min-h-screen text-center px-4">
-  <img src="pass.png" alt="Passed" class="w-64 mb-6" />
-  <h1 class="text-4xl font-bold text-green-800">Congratulations!</h1>
-  <h2 id="studentName" class="text-xl font-semibold"></h2>
-  <p class="text-lg text-green-700 mt-2">You passed. Well done!</p>
+<body>
+  <div class="certificate-container">
+    <img src="pass.png" alt="Pass Certificate" class="certificate-image" />
+    <div class="name-overlay" id="nameOverlay">Student Name</div>
+  </div>
+
+  <script>
+    // Extract name from query string
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param) || 'Student Name';
+    }
+
+    document.getElementById('nameOverlay').textContent = getQueryParam('name');
+  </script>
 </body>
 </html>
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get("name") || "Student";
-
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("studentName").textContent = name;
-  });
-</script>
-
