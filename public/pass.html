@@ -12,7 +12,11 @@
     }
     .certificate-container {
       position: relative;
-      display: inline-block;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
     }
     .certificate-image {
       display: block;
@@ -21,15 +25,19 @@
     }
     .name-overlay {
       position: absolute;
-      top: 50%; /* vertical center */
-      left: 50%; /* horizontal center */
+      top: 52%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      color: white;
-      font-size: 3rem;
+      color: #fbd767;
+      font-size: 28px;
       font-weight: bold;
-      text-shadow: 0 0 5px rgba(0,0,0,0.7);
-      pointer-events: none; /* so it doesn’t block clicks */
-      white-space: nowrap;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgb(0 0 0 / 70%), 0px 0px 10px rgb(255 0 141 / 100%);
+      width: 100%;
+      padding: 0 2rem;
+      box-sizing: border-box;
+      word-wrap: break-word;
+      white-space: normal;
     }
   </style>
 </head>
