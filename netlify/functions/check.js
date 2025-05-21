@@ -6,7 +6,9 @@ exports.handler = async function (event) {
 
     const apiKey = process.env.SHEETDB_API_KEY;
     const apiURL = `https://sheetdb.io/api/v1/${apiKey}/search?id=${id}`;
-
+    if (apiKey) {
+      console.log("found apikey");
+    }
     const res = await fetch(apiURL);
     const data = await res.json();
 

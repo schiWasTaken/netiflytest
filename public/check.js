@@ -13,7 +13,7 @@ document.getElementById("checkForm").addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
-
+    console.log("Incoming data:", data);
     if (data.status === "pass") {
       window.location.href = `pass.html?name=${encodeURIComponent(data.name)}`;
     } else {
