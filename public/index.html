@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><title>Check Result</title></head>
+<body>
+  <h2>Enter ID:</h2>
+  <input type="text" id="idInput">
+  <button onclick="check()">Check</button>
+  <p id="output"></p>
+
+  <script>
+    async function check() {
+      const id = document.getElementById("idInput").value;
+      const response = await fetch("/.netlify/functions/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+      const data = await response.json();
+      document.getElementById("output").innerText = data.status;
+    }
+  </script>
+</body>
+</html>
