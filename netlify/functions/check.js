@@ -1,34 +1,21 @@
-const fs = require("fs");
-const path = require("path");
-const csv = require("csv-parser");
+document.getElementById("checkForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
-  }
+  const id = document.getElementById("idInput").value;
 
-  const { id } = JSON.parse(event.body);
-  const results = [];
-
-  const dataPath = path.join(__dirname, "../../data/results.csv");
-
-  return new Promise((resolve, reject) => {
-    fs.createReadStream(dataPath)
-      .pipe(csv())
-      .on("data", (row) => results.push(row))
-      .on("end", () => {
-        const match = results.find((r) => r.id === id);
-        if (match) {
-          resolve({
-            statusCode: 200,
-            body: JSON.stringify({ status: match.status }),
-          });
-        } else {
-          resolve({
-            statusCode: 404,
-            body: JSON.stringify({ status: "ID not found" }),
-          });
-        }
-      });
+  const res = await fetch("/.netlify/functions/check", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ id })
   });
-};
+
+  const data = await res.json();
+
+  if (data.status === "pass") {
+    window.location.href = "pass.html";
+  } else {
+    window.location.href = "fail.html";
+  }
+});
