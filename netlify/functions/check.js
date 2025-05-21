@@ -1,34 +1,36 @@
-const fs = require("fs");
-const path = require("path");
-const csv = require("csv-parser");
+const fetch = require("node-fetch");
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+exports.handler = async function (event) {
+  try {
+    const { id } = JSON.parse(event.body || "{}");
+
+    const apiKey = process.env.SHEETDB_API_KEY;
+    const apiURL = `https://sheetdb.io/api/v1/${apiKey}/search?id=${id}`;
+
+    const res = await fetch(apiURL);
+    const data = await res.json();
+
+    if (data.length > 0) {
+      // Found student
+      const student = data[0];
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          status: student.status.toLowerCase(),
+          name: student.name,
+        }),
+      };
+    } else {
+      // Not found
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ status: "fail", name: null }),
+      };
+    }
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ status: "error", message: error.message }),
+    };
   }
-
-  const { id } = JSON.parse(event.body);
-  const results = [];
-
-  const dataPath = path.join(__dirname, "../../data/results.csv");
-
-  return new Promise((resolve, reject) => {
-    fs.createReadStream(dataPath)
-      .pipe(csv())
-      .on("data", (row) => results.push(row))
-      .on("end", () => {
-        const match = results.find((r) => r.id === id);
-        if (match) {
-          resolve({
-            statusCode: 200,
-            body: JSON.stringify({ status: match.status }),
-          });
-        } else {
-          resolve({
-            statusCode: 404,
-            body: JSON.stringify({ status: "ID not found" }),
-          });
-        }
-      });
-  });
 };
